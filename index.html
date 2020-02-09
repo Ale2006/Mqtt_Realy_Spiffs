@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Tutorial 13</title>
+    <script src='JS/mqttws31.js' type='text/javascript'></script>
+    <!-- "https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" -->
+  </head>
+  <body>
+      <div>
+        <h2>Suscripciones:</h2>
+      </div>
+      <div>
+        <a>Temperatura: </a>
+        <a id ="temperatura">-</a>
+      </div>
+      <div>
+        <a>Pulsador: </a>
+        <a id ="pulsador">-</a>
+      </div>
+      <div>
+        <a>Salida Relay 1: </a>
+        <a id ="Relay1">-</a>
+      </div>
+      <div>
+        <a>Salida Relay 2: </a>
+        <a id ="Relay2">-</a>
+      </div>
+      <div>
+        <a>Salida Anal�gica: </a>
+        <a id ="salidaAnalogica">-</a>
+      </div>
+      <div>
+        <h2>Publicaciones:</h2>
+      </div>
+      <div>
+        <a>Salida Salida Relay 1: </a>
+        <button type='button' onclick='OnOff("ON",1)'>ON</button>
+        <button type='button' onclick='OnOff("OFF",1)'>OFF</button>
+      </div>
+      <div>
+        <a>Salida Salida Relay 2: </a>
+        <button type='button' onclick='OnOff("ON",2)'>ON</button>
+        <button type='button' onclick='OnOff("OFF",2)'>OFF</button>
+      </div>
+      <div>
+        <a>Salida Anal�gica: </a>
+        <input type="range" id="myRange" min="0" max="1023"  onmouseup="enviarSalidaAnalogica()">
+      </div>
+      <div>
+         <button style="color:red" id="coneccion">OFFLINE</button>
+      </div>
+<script src="JS/Datos.js" type="text/javascript"></script>
+  </body>
+</html>
