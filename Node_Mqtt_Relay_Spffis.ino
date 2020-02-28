@@ -11,12 +11,12 @@ int contconexion = 0;
 int led1=12;
 int led2=15;
 
-const char *ssid = "TeleCentro-39b0";
-const char *password = "FWMMHDNMJDZ5";
+const char *ssid = "****";
+const char *password = "*****";
 char   SERVER[50]   = "tailor.cloudmqtt.com"; //"m11.cloudmqtt.com"
 int    SERVERPORT   = 12498;
-String USERNAME = "xoifzhmn";   
-char   PASSWORD[50] = "ef5utxHyF74A";     
+String USERNAME = "****";   
+char   PASSWORD[50] = "****";     
 
 unsigned long previousMillis = 0;
 
