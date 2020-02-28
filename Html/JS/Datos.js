@@ -1,5 +1,5 @@
-  usuario = 'xoifzhmn';
-  contrasena = 'ef5utxHyF74A';
+  usuario = '******';
+  contrasena = '*******';
 
   function OnOff(dato, n){
     message = new Paho.MQTT.Message(dato);
