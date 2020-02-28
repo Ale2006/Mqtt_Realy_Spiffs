@@ -33,8 +33,10 @@ char PULSADOR[50];
 char SALIDADIGITAL[50];
 char RELAY1[50];
 char RELAY2[50];
+char ESTADO[50];
 char SALIDAANALOGICA[50];
 int x=0;
+int valorA;
 
 
 
@@ -68,6 +70,13 @@ bool loadConfig() {
   }
   const char* Relay1 = doc["Relay1"];
   const char* Relay2 = doc["Relay2"];
+  String SalidaAnalogica = doc["salidaAnalogica"];
+
+/*Serial.println("*****");
+Serial.println(SalidaAnalogica);
+Serial.println("*****");
+*/
+
 
   if((String)Relay1=="ON"){
     digitalWrite(led1, HIGH);
@@ -81,11 +90,15 @@ bool loadConfig() {
   else{
     digitalWrite(led2, LOW);
     }
+
+  analogWrite(13,SalidaAnalogica.toInt());
   
   Serial.print("Estado Relay1: ");
   Serial.println(Relay1);
   Serial.print("Estado Relay2: ");
   Serial.println(Relay2);
+  Serial.print("Salida Analogica: ");
+  Serial.println(SalidaAnalogica);
   return true;
 }
 
@@ -95,6 +108,7 @@ bool saveConfig() {
   
   doc["Relay1"] = "OFF";
   doc["Relay2"] = "OFF";
+  doc["salidaAnalogica"]=0;
 
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
@@ -120,6 +134,7 @@ PubSubClient client(espClient);
 
 //------------------------CALLBACK-----------------------------
 void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.println("**");
   
   char PAYLOAD[5] = "    ";
   
@@ -130,6 +145,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
     PAYLOAD[i] = (char)payload[i];
   }
   Serial.println(PAYLOAD);
+  
+   if (String(topic) ==  String(ESTADO)){
+   //client.publish(RELAY1, "OFF");
+   }
 
   if (String(topic) ==  String(RELAY1)) {
     if (payload[1] == 'N'){
@@ -150,6 +169,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   if (String(topic) ==  String(SALIDAANALOGICA)) {
     analogWrite(13, String(PAYLOAD).toInt());
+    valorA=String(PAYLOAD).toInt();
   }
 
   String accion=String(topic).substring(10);
@@ -171,6 +191,7 @@ void reconnect() {
       Serial.println("conectado");
       client.subscribe(RELAY1);
       client.subscribe(RELAY2);
+      client.subscribe(ESTADO);
       client.subscribe(SALIDAANALOGICA);
     } else {
       Serial.print("fallo, rc=");
@@ -244,6 +265,9 @@ void setup() {
   String salidaAnalogica = "/" + USERNAME + "/" + "salidaAnalogica"; 
   salidaAnalogica.toCharArray(SALIDAANALOGICA, 50);
 
+  String Estado = "/" + USERNAME + "/" + "Estado"; 
+  Estado.toCharArray(ESTADO, 50);
+
 //-------------------SPIFFS---------------
 
 Serial.println("Mounting FS...");
@@ -279,7 +303,7 @@ void loop() {
     strtemp.toCharArray(valueStr, 15);
     Serial.println("Enviando: [" +  String(TEMPERATURA) + "] " + strtemp);
     client.publish(TEMPERATURA, valueStr);
-  }
+  }*/
   
   if (digitalRead(14) == 0) {
     strPulsador = "presionado";
@@ -292,13 +316,15 @@ void loop() {
     strPulsador.toCharArray(valueStr, 15);
     Serial.println("Enviando: [" +  String(PULSADOR) + "] " + strPulsador);
     client.publish(PULSADOR, valueStr);
-  }*/
+  }
 }
 
 void guardar(){
 
 int estado1=digitalRead(led1);
 int estado2=digitalRead(led2);
+
+
 
   
   StaticJsonDocument<200> doc;
@@ -319,6 +345,7 @@ int estado2=digitalRead(led2);
   doc["Relay1"] = "OFF";
   doc["Relay2"] = "OFF";
   }
+  doc["salidaAnalogica"]=(String)valorA;
   File configFile = SPIFFS.open("/config.json", "w");
   serializeJson(doc, configFile);
   
@@ -327,3 +354,4 @@ int estado2=digitalRead(led2);
 
   
 
+  
